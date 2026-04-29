@@ -4,6 +4,7 @@ from datetime import datetime, date
 from flask import Flask,  flash, redirect, render_template, request, session
 from flask_session import Session
 from functools import wraps
+import secrets
 from werkzeug.security import check_password_hash, generate_password_hash
 
 app = Flask(__name__)
@@ -255,3 +256,8 @@ def history():
     user_id = session["user_id"]
     tasks_completed = db.execute("SELECT * FROM tasks WHERE user_id = ? AND status = 'complete' ORDER BY completion_date DESC", user_id)
     return render_template("history.html", tasks=tasks_completed)
+
+
+
+if __name__ == "__main__":
+    app.run(debug=False)
