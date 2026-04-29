@@ -1,0 +1,85 @@
+{% extends "layout.html" %}
+
+{% block title %}Today's Tasks{% endblock %}
+
+{% block main %}
+    <h2 class="mb-4 text-center fw-bold">Tasks for Today ({{ today_text }})</h2>
+
+    {% if tasks %}
+        <h4 class="mb-4 text-center">You have {{ tasks|length }} task(s) for today!</h4>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">Task</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Due Date</th>
+                        <th scope="col">Priority</th>
+                        <th scope="col">Category</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for task in tasks %}
+                        {% set days = task.days_until_due|int %}
+
+                        {# Determine row styling based on days left #}
+                        {% set row_class = "" %}
+                        {% if days < 0 %}
+                            {% set row_class = "table-danger fw-bold" %} {# Overdue #}
+                        {% elif days == 0 %}
+                            {% set row_class = "table-warning text-danger fw-bold" %} {# Today #}
+                        {% elif days == 1 %}
+                            {% set row_class = "table-warning fw-bold" %} {# Tomorrow #}
+                        {% elif days <= 7 %}
+                            {% set row_class = "table-warning" %} {# Within 7 days #}
+                        {% endif %}
+
+                        {# Priority badge color #}
+                        {% set priority_class = {
+                            'high': 'bg-danger',
+                            'medium': 'bg-warning text-dark',
+                            'low': 'bg-success'
+                        }.get(task.priority|lower, 'bg-secondary') %}
+
+                        <tr class="{{ row_class }}">
+                            <td class="fw-semibold">{{ task.task }}</td>
+                            <td>{{ task.description or "N/A" }}</td>
+                            <td>
+                                <strong>{{ task.due_date_text }}</strong>
+                                {% if days < 0 %}
+                                    <span class="badge bg-danger ms-2">Overdue</span>
+                                {% elif days == 0 %}
+                                    <span class="badge bg-danger ms-2">Today!</span>
+                                {% elif days == 1 %}
+                                    <span class="badge bg-warning text-dark ms-2">Tomorrow</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="badge {{ priority_class }} text-white">
+                                    {{ task.priority|capitalize }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if task.category and task.category != "Uncategorized" %}
+                                    <span class="badge bg-info text-dark">{{ task.category }}</span>
+                                {% else %}
+                                    <em class="text-muted">None</em>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="text-center py-5">
+            <h4 class="text-muted">No incomplete tasks — you're all caught up! </h4>
+            <a href="/add_task" class="btn btn-primary btn-lg mt-3">Add a New Task</a>
+        </div>
+    {% endif %}
+    <div class="text-center mt-4">
+        <a href="/add_task" class="btn btn-primary">Add Task</a>
+        &nbsp;&nbsp;
+        <a href="edit_task" class="btn btn-primary">Edit Task</a>
+    </div>
+{% endblock %}

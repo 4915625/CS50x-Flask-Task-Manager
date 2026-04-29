@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+
+{% block title %}Add Task{% endblock %}
+
+{% block main %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4 p-md-5">
+                    <h2 class="text-center mb-4 fw-bold">Add New Task</h2>
+
+                    <form action="/add_task" method="POST">
+
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="task" name="task" placeholder="Task" autocomplete="off" autofocus required>
+                            <label for="task">Task Title</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="description" name="description" placeholder="Description (Optional)">
+                            <label for="description">Description (Optional)</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input type="date" class="form-control" id="due_date" name="due_date" placeholder="Due Date">
+                            <label for="due_date">Due Date</label>
+                        </div>
+
+                        <div class="mb-3">
+                            <select class="form-select" id="priority" name="priority">
+                                <option value="" selected disabled>Select Priority</option>
+                                <option value="Low">Low</option>
+                                <option value="Medium">Medium</option>
+                                <option value="High">High</option>
+                            </select>
+                        </div>
+
+                        <div class="form-floating mb-4">
+                            <input type="text" class="form-control" id="category" name="category" placeholder="Category (Optional)">
+                            <label for="category">Category (Optional)</label>
+                        </div>
+
+                        <div class="d-grid">
+                            <button class="btn btn-primary btn-lg" type="submit">Add Task</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

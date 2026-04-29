@@ -1,0 +1,97 @@
+{% extends "layout.html" %}
+
+{% block title %}Edit Task{% endblock %}
+
+{% block main %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4 p-md-5">
+                    <h2 class="text-center mb-4 fw-bold">Edit or Manage Task</h2>
+
+                    <form action="/edit_task" method="POST">
+                        <div class="form-floating mb-3">
+                            <select class="form-select" id="action" name="action" autofocus required>
+                                <option value="" disabled selected>Select Action</option>
+                                <option value="complete">Mark as Complete</option>
+                                <option value="delete">Delete Task</option>
+                                <option value="modify-description">Change Description</option>
+                                <option value="modify-due-date">Change Due Date</option>
+                                <option value="modify-priority">Change Priority</option>
+                                <option value="modify-category">Change Category</option>
+                            </select>
+                            <label for="action">What do you want to do?</label>
+                        </div>
+
+                        <div id="task-selector" class="form-floating mb-3" style="display: none;">
+                            <select class="form-select" id="task-select" name="task" required>
+                                <option value="" disabled selected>Select a Task</option>
+                                {% for task in tasks %}
+                                    <option value="{{ task.task }}">{{ task.task }}</option>
+                                {% endfor %}
+                            </select>
+                            <label for="task-select">Which task?</label>
+                        </div>
+
+                        <div id="modify-description" class="form-floating mb-3" style="display: none;">
+                            <input type="text" class="form-control" id="new-description" name="new-description" placeholder="New Description">
+                            <label for="new-description">New Description</label>
+                        </div>
+
+                        <div id="modify-due-date" class="form-floating mb-3" style="display: none;">
+                            <input type="date" class="form-control" id="new-due-date" name="new-due-date" placeholder="New Due Date">
+                            <label for="new-due-date">New Due Date</label>
+                        </div>
+
+                        <div id="modify-priority" class="mb-3" style="display: none;">
+                            <select class="form-select" id="new-priority" name="new-priority">
+                                <option value="" disabled selected>Select Priority</option>
+                                <option value="Low">Low</option>
+                                <option value="Medium">Medium</option>
+                                <option value="High">High</option>
+                            </select>
+                        </div>
+
+                        <div id="modify-category" class="form-floating mb-4" style="display: none;">
+                            <input type="text" class="form-control" id="new-category" name="new-category" placeholder="New Category (Optional)">
+                            <label for="new-category">New Category (Optional)</label>
+                        </div>
+
+                        <div class="d-grid">
+                            <button class="btn btn-primary btn-lg" type="submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('action').addEventListener('change', function() {
+        const action = this.value;
+
+        document.getElementById('task-selector').style.display = 'none';
+        document.getElementById('modify-description').style.display = 'none';
+        document.getElementById('modify-due-date').style.display = 'none';
+        document.getElementById('modify-priority').style.display = 'none';
+        document.getElementById('modify-category').style.display = 'none';
+
+        if (action) {
+            document.getElementById('task-selector').style.display = 'block';
+        }
+
+        if (action === 'modify-description') {
+            document.getElementById('modify-description').style.display = 'block';
+        } else if (action === 'modify-due-date') {
+            document.getElementById('modify-due-date').style.display = 'block';
+        } else if (action === 'modify-priority') {
+            document.getElementById('modify-priority').style.display = 'block';
+        } else if (action === 'modify-category') {
+            document.getElementById('modify-category').style.display = 'block';
+        }
+
+    });
+</script>
+{% endblock %}
