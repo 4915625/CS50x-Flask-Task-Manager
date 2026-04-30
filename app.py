@@ -1,21 +1,17 @@
 from cs50 import SQL
-
 from datetime import datetime, date
 from flask import Flask,  flash, redirect, render_template, request, session
-from flask_session import Session
 from functools import wraps
 import os
 from werkzeug.security import check_password_hash, generate_password_hash
 
 app = Flask(__name__)
 
-app.config["SECRET_KEY"] = os.getenv("SECRET_KEY") or "dev-key-change-in-production"
+app.config["SECRET_KEY"] = os.getenv("SECRET_KEY") or "jOEGI6pJWPnUDTvufRns9+Lk2n83k2Duf86yTUfAbac="
 # app.config["SESSION_TYPE"] = "null" 
 app.config["SESSION_PERMANENT"] = False
-# app.config["SESSION_COOKIE_SECURE"] = True   
-# app.config["SESSION_COOKIE_HTTPONLY"] = True
-
-Session(app)
+app.config["SESSION_COOKIE_SECURE"] = True   
+app.config["SESSION_COOKIE_HTTPONLY"] = True
 
 db = SQL("sqlite:///project.db")
 
