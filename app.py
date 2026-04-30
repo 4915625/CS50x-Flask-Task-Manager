@@ -9,9 +9,12 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 app = Flask(__name__)
 
-app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
+app.config["SECRET_KEY"] = os.getenv("SECRET_KEY") or "dev-key-change-in-production"
+app.config["SESSION_TYPE"] = "null" 
 app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "filesystem"
+app.config["SESSION_COOKIE_SECURE"] = True   
+app.config["SESSION_COOKIE_HTTPONLY"] = True
+
 Session(app)
 
 db = SQL("sqlite:///project.db")
